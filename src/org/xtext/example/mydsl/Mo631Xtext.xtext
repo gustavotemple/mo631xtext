@@ -8,7 +8,7 @@ ProducerRoot returns ProducerRoot:
 	name=EString
 	'{'
 		'host' host=EString
-		'port' port=EInt
+		'port' port=PORT
 		'password' password=EString
 		'username' username=EString
 		'producer' '{' producer+=Producer ( "," producer+=Producer)* '}' 
@@ -19,7 +19,7 @@ ConsumerRoot returns ConsumerRoot:
 	name=EString
 	'{'
 		'host' host=EString
-		'port' port=EInt
+		'port' port=PORT
 		'password' password=EString
 		'username' username=EString
 		'consumer' '{' consumer+=Consumer ( "," consumer+=Consumer)* '}' 
@@ -69,5 +69,10 @@ Queue returns Queue:
 EString returns ecore::EString:
 	STRING | ID;
 
-EInt returns ecore::EInt:
-	'-'? INT;
+terminal PORT returns ecore::EInt:
+	('1'..'9')
+	 | ('1'..'9')('0'..'9')
+	 | ('1'..'9')('0'..'9')('0'..'9')	
+	 | ('1'..'9')('0'..'9')('0'..'9')('0'..'9')	
+	 | ('1'..'6')('0'..'9')('0'..'9')('0'..'9')('0'..'9')
+;

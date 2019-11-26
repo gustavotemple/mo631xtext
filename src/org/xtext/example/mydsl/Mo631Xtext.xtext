@@ -1,0 +1,73 @@
+grammar org.xtext.example.mydsl.Mo631Xtext with org.eclipse.xtext.common.Terminals
+
+import "platform:/resource/mo631model/model/mo631model.ecore" 
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+ProducerRoot returns ProducerRoot:
+	'ProducerRoot'
+	name=EString
+	'{'
+		'host' host=EString
+		'port' port=EInt
+		'password' password=EString
+		'username' username=EString
+		'producer' '{' producer+=Producer ( "," producer+=Producer)* '}' 
+	'}';
+
+ConsumerRoot returns ConsumerRoot:
+	'ConsumerRoot'
+	name=EString
+	'{'
+		'host' host=EString
+		'port' port=EInt
+		'password' password=EString
+		'username' username=EString
+		'consumer' '{' consumer+=Consumer ( "," consumer+=Consumer)* '}' 
+	'}';
+
+Producer returns Producer:
+	'Producer'
+	name=EString
+	'{'
+		('message' '{' message+=Message ( "," message+=Message)* '}' )?
+		'binding' binding=Binding
+	'}';
+
+Message returns Message:
+	'Message'
+	'{'
+		'payload' payload=EString
+	'}';
+
+Binding returns Binding:
+	'Binding'
+	'{'
+		'routingKey' routingKey=EString
+		'exchange' exchange=Exchange
+	'}';
+
+Exchange returns Exchange:
+	{Exchange}
+	'Exchange'
+	name=EString;
+
+Consumer returns Consumer:
+	'Consumer'
+	name=EString
+	'{'
+		'queue' '{' queue+=Queue ( "," queue+=Queue)* '}' 
+	'}';
+
+Queue returns Queue:
+	'Queue'
+	name=EString
+	'{'
+		('message' '{' message+=Message ( "," message+=Message)* '}' )?
+		'binding' '{' binding+=Binding ( "," binding+=Binding)* '}' 
+	'}';
+
+EString returns ecore::EString:
+	STRING | ID;
+
+EInt returns ecore::EInt:
+	'-'? INT;
